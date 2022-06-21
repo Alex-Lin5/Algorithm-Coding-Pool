@@ -53,8 +53,8 @@ describe('/api/returns', () => {
 
   afterEach(async () => { 
     await server.close(); 
-    await Rental.remove({});
-    await Movie.remove({});
+    await Rental.deleteMany({});
+    await Movie.deleteMany({});
   });  
 
   it('should return 401 if client is not logged in', async () => {
@@ -82,7 +82,7 @@ describe('/api/returns', () => {
   });
 
   it('should return 404 if no rental found for the customer/movie', async () => {
-    await Rental.remove({});
+    await Rental.deleteMany({});
 
     const res = await exec();
 
