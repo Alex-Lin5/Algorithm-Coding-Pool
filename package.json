@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll --verbose --coverage"
+    "test": "jest --watchAll"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +17,6 @@
     "joi": "^17.6.0",
     "joi-objectid": "^4.0.2",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.21",
     "mongoose": "^6.4.0"
   },
   "devDependencies": {
