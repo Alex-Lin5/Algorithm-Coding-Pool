@@ -32,4 +32,4 @@ const descriptionSchema = new mongoose.Schema({
   }
 });
 const Description = mongoose.model('Description', descriptionSchema);
-exports.Description = Description;
+module.exports = Description;

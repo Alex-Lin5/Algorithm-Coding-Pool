@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const descriptions = await Description.find().sort('serialNum');
-  res.send(descriptions);
+  res.render('descriptions');
+  // res.send(descriptions);
 });
 router.get('/:id', async (req, res) => {
   const description = await Description.findById(req.params.id);
