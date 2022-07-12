@@ -1,20 +1,17 @@
-const Description = require('../models/description');
+const { Description, validate } = require('../models/description');
+// const Description = require('../models/description');
 const express = require('express');
-const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   const descriptions = await Description.find().sort('serialNum');
-  res.render('descriptions');
-  // res.send(descriptions);
+  res.send(descriptions);
 });
-router.get('/:id', async (req, res) => {
-  const description = await Description.findById(req.params.id);
-  if (!description) return res.status(404)
-    .send('Can not find the description.');
-  res.send(genre);
-});
-router.post('/:id', async (req, res) => {
+router.post('/', async (req, res) => {
+  // const { error } = validate(req.body);
+  // if (error) return res.status(400)
+  //   .send(error.details[0].message);
+
   const description = new Description({
     title: req.body.title,
     brief: req.body.brief,
@@ -25,7 +22,18 @@ router.post('/:id', async (req, res) => {
   await description.save();
   res.send(description);
 });
+router.get('/:id', async (req, res) => {
+  const description = await Description.findById(req.params.id);
+  if (!description) return res.status(404)
+    .send('Can not find the description.');
+  res.send(description);
+});
 router.put('/:id', async(req, res) => {
+  console.log(validate);
+  // const { error } = validate(req.body);
+  // if (error) return res.status(400)
+  //   .send(error.details[0].message);
+
   const description = await Description.findByIdAndUpdate(req.params.id, 
     {
       title: req.body.title,
@@ -40,6 +48,10 @@ router.put('/:id', async(req, res) => {
   res.send(description);
 });
 router.delete('/:id', async(req, res) => {
+  // const { error } = validate(req.body);
+  // if (error) return res.status(400)
+  //   .send(error.details[0].message);
+
   const description = await Description.findByIdAndDelete(req.params.id);
   if (!description)
     return res.status(404).send('Description ID can not be found.');
