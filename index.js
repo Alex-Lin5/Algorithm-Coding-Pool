@@ -1,9 +1,7 @@
 const express = require('express');
-const path = require('path');
 const app = express();
 
 require('./startup/db')();
-require('./startup/views')(app);
 require('./startup/routes')(app);
 // require('./startup/config')();
 // require('./startup/validation')();

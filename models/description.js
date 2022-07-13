@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Joi = require('joi');
 
 const descriptionSchema = new mongoose.Schema({
   title: {
@@ -7,7 +6,6 @@ const descriptionSchema = new mongoose.Schema({
     required: true,
     minlength: 3,
     maxlength: 50,
-    default: 'unknown'
   },
   brief: {
     type: String,
@@ -21,7 +19,6 @@ const descriptionSchema = new mongoose.Schema({
     required: true,
     min: 1,
     max: 10000,
-    default: 0
   },
   solved: {
     type: Boolean,
@@ -34,17 +31,4 @@ const descriptionSchema = new mongoose.Schema({
 });
 const Description = mongoose.model('Description', descriptionSchema);
 
-function validate(description){
-  const descriptionSchema = Joi.object({
-      title: Joi.string().min(3).max(50).required(),
-      brief: Joi.string().min(5).max(10000),
-      serialNum: Joi.number.min(1).max(10000).required(),
-      solved: Joi.boolean,
-      difficulty: Joi.string()
-  });
-  // return Joi.validate(description, schema);
-  return descriptionSchema.validate(description);
-}
-
 module.exports = Description;
-module.exports = validate;

@@ -14,7 +14,7 @@ describe('/descriptions', () => {
   afterEach(async () => {
     await server.close();
     const result = await Description.deleteMany();
-    console.log('Delete: ', result);
+    // console.log('Delete: ', result);
   });
 
   describe('GET /', () => {

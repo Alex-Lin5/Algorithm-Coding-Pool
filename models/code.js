@@ -28,4 +28,4 @@ const codeSchema = new mongoose.Schema({
 });
 const Code = mongoose.model('Code', codeSchema);
 
-exports.Code = Code;
+module.exports = Code;
