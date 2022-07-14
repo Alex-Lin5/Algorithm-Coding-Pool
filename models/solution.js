@@ -14,4 +14,4 @@ const solutionSchema = new mongoose.Schema({
 });
 const Solution = mongoose.model('Solution', solutionSchema);
 
-exports.Solution = Solution;
+module.exports = Solution;

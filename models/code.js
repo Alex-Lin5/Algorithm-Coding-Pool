@@ -6,7 +6,7 @@ const codeSchema = new mongoose.Schema({
     required: false,
     minlength: 5,
     maxlength: 10000,
-    default: `class Solution(object):\n\tdef `
+    default: `class Solution(object):\n\tdef: `
   },
   language: {
     type: String,
