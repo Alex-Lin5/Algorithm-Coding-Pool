@@ -9,7 +9,16 @@ async function seeding(){
     { title: 'Two Sum', serialNum: 1 },
     { title: 'Palindrome Number', serialNum: 9 }
   ];
-  const result = await Description.insertMany(descriptions)
+  const answers = [
+    { content: 'good answer here'},
+    { content: 'Test answer'}
+  ];
+  const codes = [
+    { content: 'good code here'},
+    { content: 'Java here', language: 'Java'}
+  ];
+  const solutions = [];
+  const result = await Description.insertMany(descriptions);
   console.log('result: ', result);
 }
 

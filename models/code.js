@@ -10,8 +10,7 @@ const codeSchema = new mongoose.Schema({
   },
   language: {
     type: String,
-    minlength: 1,
-    maxlength: 20,
+    enum: ['Python', 'Java', 'Javascript', 'C++'],
     default: 'Python'
   },
   result: {

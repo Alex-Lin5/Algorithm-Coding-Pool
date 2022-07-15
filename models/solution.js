@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
-const { answer } = require('./answer');
-const { code } = require('./code');
+const Answer = require('./answer');
+const Code = require('./code');
 
 const solutionSchema = new mongoose.Schema({
   answer: {
-    type: answer.Schema,
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Answer',
     required: true
   },
   code: {
-    type: code.Schema,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Code',
     require: true
   }
 });

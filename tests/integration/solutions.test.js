@@ -19,27 +19,32 @@ describe('/solutions', () => {
   describe('GET /', () => {
     it('should return all solutions', async () => {
       await Solution.insertMany([
-        { content: 'good solution here'},
-        { content: 'Test solution'}
-      ])
+        { 
+          answerContent: 'good answer here',
+          codeContent: 'good code here'},
+        { 
+          answerContent: 'Test answer',
+          codeContent: 'Java here', 
+          language: 'Java'}
+      ]);
       const res = await request(server).get(root);
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
-      expect(res.body.some(c => c.content === 'good solution here')).toBeTruthy();
-      expect(res.body.some(c => c.content === 'Test solution')).toBeTruthy();  
+      expect(res.body.some(s => s.answerContent === 'good answer here')).toBeTruthy();
+      expect(res.body.some(s => s.answerContent === 'Test answer')).toBeTruthy();  
     })
   })
 
   describe('POST /', () => {
     it('should create a solution', async () => {
-      const solution = { content: 'dummy solutions'};
+      const solution = { content: 'dummy answers'};
       const res = await request(server)
         .post(root).send(solution);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('_id');
-      expect(res.body).toHaveProperty('content', 'dummy solutions');
+      expect(res.body).toHaveProperty('content', 'dummy answers');
     })
   })
 
