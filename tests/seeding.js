@@ -1,16 +1,21 @@
 const Description = require('../models/description');
-const mongoose = require('mongoose');
-const config = require("config");
 const Answer = require('../models/answer');
 const Code = require('../models/code');
-const Solution = require('../models/solution');
+const Question = require('../models/question');
+
+async function clearup(){
+  const description = await Description.deleteMany({});
+  const answer = await Answer.deleteMany({});
+  const code = await Code.deleteMany({});
+  const question = await Question.deleteMany({});
+
+  console.log('description: ', description);
+  console.log('answer: ', answer);
+  console.log('code: ', code);
+  console.log('question: ', question);
+}
 
 async function seeding(){
-  const db = config.get('db');
-  const server = require('../index');
-  // console.log('server: ', server);
-  console.log('db: ', db);
-
   const descriptions = [
     { title: 'Two Sum', serialNum: 1 },
     { title: 'Palindrome Number', serialNum: 9 }
@@ -23,15 +28,38 @@ async function seeding(){
     { content: 'good code here'},
     { content: 'Java here', language: 'Java'}
   ];
-  const solutions = [];
   await Answer.insertMany(answers);
   await Code.insertMany(codes);
-  await Solution.insertOne({
-    answer: Answer.findOne()._id,
-    code: Code.findOne()._id
-  });
-  const result = await Description.insertMany(descriptions);
-  console.log('result: ', result);
+  await Description.insertMany(descriptions);
+
+  const desFind = await Description.find();
+  const ansFind = await Answer.find();
+  const cdsFind = await Code.find();
+  const num = await Description.find().count();
+  for(i=0; i<num; i++) {
+    let question = new Question({
+      description: desFind[i],
+      solutions: {
+        answer: ansFind[i],
+        code: cdsFind[i]
+      }
+    });
+    await question.save();
+  }
 }
 
-seeding();
+async function run(){
+  // process.env.NODE_CONFIG_ENV = "test";
+  process.env.NODE_ENV = "test";
+  const server = require('../index');
+  const config = require("config");
+  const db = config.get('db');
+  console.log('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
+  console.log('db: ', db);
+
+  await clearup();
+  await seeding();
+  await server.close();
+  return process.exit(1);
+}
+run();

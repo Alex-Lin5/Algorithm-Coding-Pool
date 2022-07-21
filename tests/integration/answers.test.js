@@ -13,15 +13,10 @@ describe('/answers', () => {
   })
   afterEach(async () => {
     await server.close();
-    await Answer.deleteMany();
   })
 
   describe('GET /', () => {
     it('should return all answers', async () => {
-      await Answer.insertMany([
-        { content: 'good answer here'},
-        { content: 'Test answer'}
-      ])
       const res = await request(server).get(root);
 
       expect(res.status).toBe(200);
@@ -36,6 +31,9 @@ describe('/answers', () => {
       const answer = { content: 'dummy answers'};
       const res = await request(server)
         .post(root).send(answer);
+      await Answer.deleteOne({
+        content: answer.content
+      });
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('_id');
@@ -45,24 +43,28 @@ describe('/answers', () => {
 
   describe('GET /:id', () => {
     it('should return a specific answer', async () => {
-      const answer = new Answer({
-        content: 'dummy answers' });
-      await answer.save();
+      const answer = await Answer.findOne({
+        content: 'Test answer'
+      });
       const res = await request(server).get(`${root}/${answer._id}`);
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('content', 'dummy answers');
+      expect(res.body).toHaveProperty('content', 'Test answer');
     })
   })
 
   describe('PUT /:id', () => {
     it('should update a specific answer', async () => {
-      const answer = new Answer({ content: 'dummy answers'});
-      await answer.save();
+      const answer = await Answer.findOne({
+        content: 'good answer here'
+      })
       const answerUp = {content: 'updated answer'};
       const res = await request(server)
         .put(`${root}/${answer._id}`)
         .send(answerUp);
+      const revert = await Answer.findOneAndUpdate(answer._id, {
+        content: 'good answer here'
+      })
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('content', 'updated answer');
@@ -72,16 +74,16 @@ describe('/answers', () => {
   describe('DELETE /:id', () => {
     it('should delete a specific answer', async () => {
       const answer = new Answer({
-        content: 'good answer here'
+        content: 'delete answer here'
       })
       await answer.save();
       const res = await request(server)
         .delete(`${root}/${answer._id}`);
-      const codeRead = await Answer.findById(answer._id);
+      const answerFind = await Answer.findById(answer._id);
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('content', 'good answer here');
-      expect(codeRead).toBeNull();
+      expect(res.body).toHaveProperty('content', 'delete answer here');
+      expect(answerFind).toBeNull();
     })
   })
 })

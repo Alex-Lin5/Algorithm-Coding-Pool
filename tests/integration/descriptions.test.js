@@ -5,7 +5,7 @@ const config = require("config");
 const db = config.get('db');
 const root = '/descriptions';
 
-describe('/descriptions', () => {
+describe(root, () => {
   let server;
   console.log('db: ', db);
   beforeEach(() => {
@@ -13,16 +13,10 @@ describe('/descriptions', () => {
   });
   afterEach(async () => {
     await server.close();
-    const result = await Description.deleteMany();
-    // console.log('Delete: ', result);
   });
 
   describe('GET /', () => {
     it('should return all descriptions', async() => {
-      await Description.insertMany([
-        { title: 'Two Sum', serialNum: 1 },
-        { title: 'Palindrome Number', serialNum: 9 }
-      ])
       const res = await request(server).get(root);
 
       expect(res.status).toBe(200);
@@ -34,23 +28,25 @@ describe('/descriptions', () => {
 
   describe('POST /', () => {
     it('should create a new description item', async() => {
-      const description = { title: 'Two Sum', serialNum: 1 };
+      const description = { title: 'Two Sum II', serialNum: 2 };
       const res = await request(server)
-      .post('/descriptions').send(description);
+        .post('/descriptions').send(description);
+      const revert = await Description.deleteOne({
+        title: 'Two Sum II', serialNum: 2
+      })
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('_id');
-      expect(res.body).toHaveProperty('serialNum', 1);
+      expect(res.body).toHaveProperty('serialNum', 2);
       expect(description).not.toBeNull();
     });
   });
 
   describe('GET /:id', () => {
     it('should return specific description', async() => {
-      const description = new Description({
+      const description = await Description.findOne({
         title: 'Two Sum', serialNum: 1
-      });
-      await description.save();
+      })
       const res = await request(server).get(`${root}/${description._id}`);
 
       expect(res.status).toBe(200);
@@ -61,24 +57,25 @@ describe('/descriptions', () => {
 
   describe('PUT /:id', () => {
     it('should update an existed description item', async() => {
-      const description = new Description({
+      const description = await Description.findOne({
         title: 'Two Sum', serialNum: 1
-      });
-      await description.save();
-      const descriptionUp = { title: 'Two Sum 2', serialNum: 2 };
+      })
+      const descriptionUp = { title: 'Two Sum III', serialNum: 3 };
       const res = await request(server)
-      .put(`${root}/${description._id}`)
-      .send(descriptionUp);
-
+        .put(`${root}/${description._id}`)
+        .send(descriptionUp);
+      const revert = await Description.findByIdAndUpdate(description._id, {
+        title: 'Two Sum', serialNum: 1   
+      })
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('serialNum', 2);
+      expect(res.body).toHaveProperty('serialNum', 3);
     });
   });
 
   describe('DELETE /:id', () => {
     it('should delete the specific description item', async() => {
       const description = new Description({
-        title: 'Two Sum', serialNum: 1
+        title: 'Three Sum', serialNum: 10
       });
       await description.save();
       const res = await request(server)
@@ -86,7 +83,7 @@ describe('/descriptions', () => {
       const descriptionRead = await Description.findById(description._id);
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('serialNum', 1);
+      expect(res.body).toHaveProperty('serialNum', 10);
       expect(descriptionRead).toBeNull();
     });
   });

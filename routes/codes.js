@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const codes = await Code.find();
-  res.send(codes);
+  res.status(200).send(codes);
 });
 router.post('/', async (req, res) => {
   const code = new Code({
@@ -14,13 +14,13 @@ router.post('/', async (req, res) => {
     performance: req.body.performance
   });
   await code.save();
-  res.send(code);
+  res.status(200).send(code);
 });
 router.get('/:id', async (req, res) => {
   const code = await Code.findById(req.params.id);
   if (!code) return res.status(404)
     .send('Can not find the code');
-  res.send(code);
+  res.status(200).send(code);
 });
 router.put('/:id', async (req, res) => {
   const code = await Code.findByIdAndUpdate(req.params.id, {
@@ -31,13 +31,13 @@ router.put('/:id', async (req, res) => {
   }, {new: true});
   if (!code) return res.status(404)
     .send('Can not find the code');
-  res.send(code);
+  res.status(200).send(code);
 });
 router.delete('/:id', async (req, res) => {
   const code = await Code.findByIdAndDelete(req.params.id);
   if (!code) return res.status(404)
     .send('Can not find the code');
-  res.send(code);
+  res.status(200).send(code);
 });
 
 module.exports = router;
