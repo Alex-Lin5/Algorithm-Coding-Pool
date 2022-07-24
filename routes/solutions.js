@@ -1,5 +1,7 @@
-const Answer = require('../models/answer');
-const Code = require('../models/code');
+// const Answer = require('../models/answer');
+// const Code = require('../models/code');
+const Solution = require('../models/solution');
+
 const express = require('express');
 const router = express.Router();
 
@@ -9,8 +11,8 @@ router.get('/', async (req, res) => {
 })
 router.post('/', async (req, res) => {
   const solution = new Solution({
-    answer: req.body.solutions.answer,
-    code: req.body.solutions.code
+    answer: req.body.answer,
+    code: req.body.code
   });
   await solution.save();
   res.status(200).send(solution);

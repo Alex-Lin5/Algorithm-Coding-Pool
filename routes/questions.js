@@ -11,10 +11,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const question = new Question({
     description: req.body.description,
-    solutions: {
-      answer: req.body.solutions.answer,
-      code: req.body.solutions.code
-    }
+    solutions: req.body.solution
   });
   await question.save();
   res.status(200).send(question);
@@ -27,10 +24,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const question = await Question.findByIdAndUpdate(req.params.id, {
     description: req.body.description,
-    solutions: {
-      answer: req.body.answer,
-      code: req.body.code
-    }
+    solutions: req.body.solution
   })
   if (!question) return question.status(404)
     .send('Can not find the question');

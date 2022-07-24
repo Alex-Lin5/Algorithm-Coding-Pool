@@ -2,16 +2,19 @@ const Description = require('../models/description');
 const Answer = require('../models/answer');
 const Code = require('../models/code');
 const Question = require('../models/question');
+const Solution = require('../models/solution');
 
 async function clearup(){
   const description = await Description.deleteMany({});
   const answer = await Answer.deleteMany({});
   const code = await Code.deleteMany({});
+  const solution = await Solution.deleteMany();
   const question = await Question.deleteMany({});
 
   console.log('description: ', description);
   console.log('answer: ', answer);
   console.log('code: ', code);
+  console.log('solution: ', solution);
   console.log('question: ', question);
 }
 
@@ -35,14 +38,17 @@ async function seeding(){
   const desFind = await Description.find();
   const ansFind = await Answer.find();
   const cdsFind = await Code.find();
-  const num = await Description.find().count();
+  const num = await Description.find().count();  
   for(i=0; i<num; i++) {
+    let solution = new Solution({
+      answer: ansFind[i],
+      code: cdsFind[i]
+    });
+    await solution.save();
+
     let question = new Question({
       description: desFind[i],
-      solutions: {
-        answer: ansFind[i],
-        code: cdsFind[i]
-      }
+      solutions: solution._id
     });
     await question.save();
   }
@@ -52,10 +58,10 @@ async function run(){
   // process.env.NODE_CONFIG_ENV = "test";
   process.env.NODE_ENV = "test";
   const server = require('../index');
-  const config = require("config");
-  const db = config.get('db');
-  console.log('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
-  console.log('db: ', db);
+  // const config = require("config");
+  // const db = config.get('db');
+  // console.log('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
+  // console.log('db: ', db);
 
   await clearup();
   await seeding();

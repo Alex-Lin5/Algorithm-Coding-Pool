@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const Description = require('./description');
-const Answer = require('./answer');
-const Code = require('./code');
+const Solution = require('./solution');
 
 const questionSchema = new mongoose.Schema({
   description: {
@@ -10,14 +9,8 @@ const questionSchema = new mongoose.Schema({
     required: true
   },
   solutions: [{
-    answer: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Answer'
-    },
-    code: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Code'
-    }
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Solution'
   }]
 })
 const Question = mongoose.model('Question', questionSchema);
