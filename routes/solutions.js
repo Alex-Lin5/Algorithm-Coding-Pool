@@ -27,8 +27,8 @@ router.put('/:id', async (req, res) => {
     answer: req.body.answer,
     code: req.body.code
   })
-  if (!solution) return solution.status(404)
-    .send('Can not find the solution');
+  if (!solution) 
+    return res.status(404).send('Can not find the solution');
   res.status(200).send(solution);
 })
 router.delete('/:id', async (req, res) => {

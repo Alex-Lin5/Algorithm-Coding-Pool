@@ -1,17 +1,14 @@
 const request = require('supertest');
-// const config = require("config");
 const mongoose = require('mongoose');
 
 const Solution = require('../../models/solution');
 const Answer = require('../../models/answer');
 const Code = require('../../models/code');
 
-// const db = config.get('db');
 const root = '/solutions';
 
 describe('/solutions', () => {
   let server;
-  // console.log('db: ', db);
   beforeEach(() => {
     server = require('../../index');
   })
@@ -32,14 +29,13 @@ describe('/solutions', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
-      expect(res.body.some(s => s.answer === answer._id)).toBeTruthy();
-      expect(res.body.some(s => s.code === code._id)).toBeTruthy();  
+      expect(res.body.some(s => s.answer == answer._id)).toBeTruthy();
+      expect(res.body.some(s => s.code == code._id)).toBeTruthy();  
     })
   })
 
   describe('POST /', () => {
     it('should create a solution', async () => {
-      // const solution = { content: 'dummy solutions'};
       const answer = new mongoose.Types.ObjectId();
       const code = new mongoose.Types.ObjectId();
       const solution = { answer, code };
@@ -51,7 +47,7 @@ describe('/solutions', () => {
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('_id');
-      expect(res.body).toHaveProperty('code', code._id);
+      expect(res.body).toHaveProperty('code', code._id.toString());
     })
   })
 
@@ -66,7 +62,7 @@ describe('/solutions', () => {
       const res = await request(server).get(`${root}/${solution._id}`);
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('answer', answer._id);
+      expect(res.body).toHaveProperty('answer', answer._id.toString());
     })
   })
 
@@ -79,8 +75,8 @@ describe('/solutions', () => {
         answer: answer._id
       })
       const codeID = solution.code;
-      const answerUP = new mongoose.Types.ObjectId();
-      const codeUP = new mongoose.Types.ObjectId();
+      const answerUP = new mongoose.Types.ObjectId().toString();
+      const codeUP = new mongoose.Types.ObjectId().toString();
       const solutionUp = {
         answer: answerUP,
         code: codeUP
@@ -88,20 +84,29 @@ describe('/solutions', () => {
       const res = await request(server)
         .put(`${root}/${solution._id}`)
         .send(solutionUp);
-      const revert = await Solution.findOneAndUpdate(solution._id, {
+
+      // const updated = await Solution.findById(solution._id).populate(['answer', 'code']);
+      const updated = await Solution.findById(solution._id);
+      const revert = await Solution.findByIdAndUpdate(solution._id, {
         answer: answer._id,
         code: codeID
       })
+      const reverted = await Solution.findById(solution._id).populate(['answer', 'code']);
+
+      console.log('Updated:', updated);
+      console.log('reverted:', reverted);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('answer', answerUP);
       expect(res.body).toHaveProperty('code', codeUP);
+      // expect(res.body.answer).toEqual(answerUP);
+      // expect(res.body).toHaveProperty('code', codeUP);
     })
   })
 
   describe('DELETE /:id', () => {
     it('should delete a specific solution', async () => {
-      const answer = new mongoose.Types.ObjectId();
+      const answer = new mongoose.Types.ObjectId().toString();
       const solution = new Solution({
         answer: answer,
         code: new mongoose.Types.ObjectId()
