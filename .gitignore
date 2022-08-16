@@ -1,6 +1,9 @@
-coverage/
 node_modules/
-.idea/
 package-lock.json
+
+.DS_Store
+yarn.lock
+coverage/
+.idea/
 *.log
 .vscode

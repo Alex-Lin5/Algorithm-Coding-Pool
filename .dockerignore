@@ -2,7 +2,10 @@ yarn.lock
 
 coverage/
 node_modules/
-.idea/
 package-lock.json
+.gitignore
+
+.idea/
 *.log
 .vscode
+.DS_Store
