@@ -55,17 +55,13 @@ async function seeding(){
 }
 
 async function run(){
-  // process.env.NODE_CONFIG_ENV = "test";
-  process.env.NODE_ENV = "test";
+  if (!process.env.NODE_ENV)
+    process.env.NODE_ENV = "test";
   const server = require('../index');
-  // const config = require("config");
-  // const db = config.get('db');
-  // console.log('NODE_ENV: ' + config.util.getEnv('NODE_ENV'));
-  // console.log('db: ', db);
 
   await clearup();
   await seeding();
   await server.close();
-  return process.exit(1);
+  return process.exit(0);
 }
 run();

@@ -1,0 +1,4 @@
+{
+  "jwtPrivateKey": "qwer",
+  "db": "mongodb://mongo:27017/pool_container"
+}

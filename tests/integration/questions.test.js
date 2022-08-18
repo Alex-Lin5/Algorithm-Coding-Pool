@@ -13,11 +13,9 @@ describe(root, () => {
   let server;
   beforeEach(() => {
     server = require('../../index');
-    console.log('server opened.');
   })
   afterEach(async () => {
     await server.close();
-    console.log('server closed.');
   })
 
   describe('GET /', () => {
@@ -29,12 +27,16 @@ describe(root, () => {
         answer: answer._id
       })
       const questions = await Question.find().populate(['solutions', 'description']);
+      const description = await Description.findOne();
       const res = await request(server).get(root);
+      console.log('questions,', questions);
+      console.log('res get all:', res.body);
+      console.log('res solutions,', res.body.solutions);
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
-      expect(res.body.some(q => q.description.serialNum === 1)).toBeTruthy();
-      expect(res.body.solutions).toEqual(expect.arrayContaining([solution._id]))
+      expect(res.body.some(q => q.description == description._id)).toBeTruthy();
+      expect(res.body.solutions).toEqual(expect.arrayContaining([solution._id.toString()]))
     })
   })
 
@@ -73,7 +75,8 @@ describe(root, () => {
       const res = await request(server).get(`${root}/${question._id}`);
 
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('solutions', solution._id);
+      // expect(res.body).toHaveProperty('solutions', solution._id);
+      expect(res.body.solutions).toEqual(expect.arrayContaining([solution._id.toString()]));
     })
   })
 

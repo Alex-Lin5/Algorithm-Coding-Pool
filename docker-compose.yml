@@ -1,20 +1,45 @@
 version: '3'
 services:
+  mongo:
+    image: mongo:5
+    restart: always
+    logging:
+      driver: none
+    ports:
+      - 27017:27017
+
   dev:
+    depends_on:
+      - mongo
+    restart: on-failure
     build:  
       context: .
       dockerfile: Dockerfile
     ports:
-      - '6000:3000'
+      - '7000:7000'
+    environment:
+      - NODE_ENV=container
+      - PORT=7000
     volumes:
       - /app/node_modules
       - .:/app
     command: ['npm', 'start']
+
   test:
+    depends_on:
+      - mongo
+    restart: 'no'
     build:  
       context: .
       dockerfile: Dockerfile
+    ports:
+      - '9000:3000'
+    environment:
+      - NODE_ENV=container
+      - PORT=3000
     volumes:
       - /app/node_modules
       - .:/app
-    # command: ['npm', 'test']    
+    command: npm test
+      # sh -cx "npm test"
+      

@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const descriptions = await Description.find().sort('serialNum');
-  res.send(descriptions);
+  res.status(200).send(descriptions);
 });
 router.post('/', async (req, res) => {
   const description = new Description({
@@ -15,13 +15,13 @@ router.post('/', async (req, res) => {
     difficulty: req.body.difficulty
   });
   await description.save();
-  res.send(description);
+  res.status(200).send(description);
 });
 router.get('/:id', async (req, res) => {
   const description = await Description.findById(req.params.id);
   if (!description) return res.status(404)
     .send('Can not find the description.');
-  res.send(description);
+  res.status(200).send(description);
 });
 router.put('/:id', async(req, res) => {
   const description = await Description.findByIdAndUpdate(req.params.id, 
@@ -35,14 +35,14 @@ router.put('/:id', async(req, res) => {
   if (!description) 
     return res.status(404).send('Description ID can not be found.');
   
-  res.send(description);
+  res.status(200).send(description);
 });
 router.delete('/:id', async(req, res) => {
   const description = await Description.findByIdAndDelete(req.params.id);
   if (!description)
     return res.status(404).send('Description ID can not be found.');
 
-  res.send(description);
+  res.status(200).send(description);
 });
 
 module.exports = router;
