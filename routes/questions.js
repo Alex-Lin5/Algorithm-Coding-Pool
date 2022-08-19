@@ -1,6 +1,8 @@
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const Question = require('../models/question');
-const Answer = require('../models/answer');
-const Code = require('../models/code');
+// const Answer = require('../models/answer');
+// const Code = require('../models/code');
 const express = require('express');
 const router = express.Router();
 
@@ -8,7 +10,7 @@ router.get('/', async (req, res) => {
   const questions = await Question.find();
   res.send(questions);
 })
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const question = new Question({
     description: req.body.description,
     solutions: req.body.solution
@@ -21,7 +23,7 @@ router.get('/:id', async (req, res) => {
   if (!question) return res.status(404).send('Can not find the question.');
   res.status(200).send(question);
 })
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const question = await Question.findByIdAndUpdate(req.params.id, {
     description: req.body.description,
     solutions: req.body.solution
@@ -30,7 +32,7 @@ router.put('/:id', async (req, res) => {
     .send('Can not find the question');
   res.status(200).send(question);
 })
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
   const question = await Question.findByIdAndDelete(req.params.id);
   if (!question) return res.status(404).send('Can not find the question');
   res.status(200).send(question);

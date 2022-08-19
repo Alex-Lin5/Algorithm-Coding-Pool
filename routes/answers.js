@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const Answer = require('../models/answer');
 const express = require('express');
 const router = express.Router();
@@ -6,7 +7,7 @@ router.get('/', async (req, res) => {
   const answers = await Answer.find();
   res.send(answers);
 });
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const answer = new Answer({
     content: req.body.content,
   });
@@ -19,7 +20,7 @@ router.get('/:id', async (req, res) => {
     .send('Can not find the answer');
   res.send(answer);
 });
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
   const answer = await Answer.findByIdAndUpdate(req.params.id, {
     content: req.body.content,
   }, {new: true});
@@ -27,7 +28,7 @@ router.put('/:id', async (req, res) => {
     .send('Can not find the answer');
   res.send(answer);
 });
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   const answer = await Answer.findByIdAndDelete(req.params.id);
   if (!answer) return res.status(404)
     .send('Can not find the answer');

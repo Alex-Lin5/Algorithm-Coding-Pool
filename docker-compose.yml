@@ -16,10 +16,10 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '7000:7000'
+      - '7070:7070'
     environment:
       - NODE_ENV=container
-      - PORT=7000
+      - PORT=7070
     volumes:
       - /app/node_modules
       - .:/app
