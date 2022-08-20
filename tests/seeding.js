@@ -1,3 +1,4 @@
+const logger = require('../startup/logger');
 const Description = require('../models/description');
 const Answer = require('../models/answer');
 const Code = require('../models/code');
@@ -11,11 +12,11 @@ async function clearup(){
   const solution = await Solution.deleteMany();
   const question = await Question.deleteMany({});
 
-  console.log('description: ', description);
-  console.log('answer: ', answer);
-  console.log('code: ', code);
-  console.log('solution: ', solution);
-  console.log('question: ', question);
+  logger.info('description: ', description);
+  logger.info('answer: ', answer);
+  logger.info('code: ', code);
+  logger.info('solution: ', solution);
+  logger.info('question: ', question);
 }
 
 async function seeding(){

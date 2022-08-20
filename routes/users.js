@@ -1,3 +1,4 @@
+const logger = require('../startup/logger');
 const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
@@ -7,12 +8,16 @@ const router = express.Router();
 
 router.get('/me', auth, async (req, res) => {
   const user = await User.findById(req.user._id).select('-password');
+  logger.verbose(`Send user: ${user}`);
   res.send(user);
 });
 
 router.post('/', async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
-  if (user) return res.status(400).send('User already registered.');
+  if (user) {
+    logger.error('User already registered.');
+    return res.status(400).send('User already registered.');
+  }
 
   user = new User(_.pick(req.body, ['name', 'email', 'password']));
   const salt = await bcrypt.genSalt(10);
@@ -20,6 +25,7 @@ router.post('/', async (req, res) => {
   await user.save();
 
   const token = user.generateAuthToken();
+  logger.verbose(`User token send: ${token}`);
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 

@@ -1,3 +1,4 @@
+const logger = require('../startup/logger');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const Question = require('../models/question');
@@ -8,6 +9,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const questions = await Question.find();
+  logger.verbose(`Get all questions: ${questions}`);
   res.send(questions);
 })
 router.post('/', auth, async (req, res) => {
@@ -16,11 +18,16 @@ router.post('/', auth, async (req, res) => {
     solutions: req.body.solution
   });
   await question.save();
+  logger.verbose(`Post the question: ${question}`);
   res.status(200).send(question);
 })
 router.get('/:id', async (req, res) => {
   const question = await Question.findById(req.params.id);
-  if (!question) return res.status(404).send('Can not find the question.');
+  if (!question) {
+    logger.error(`Can not find the question: ${req.params.id}`); 
+    return res.status(404).send('Can not find the question.');
+  }
+  logger.verbose(`Get the question: ${question}`);
   res.status(200).send(question);
 })
 router.put('/:id', auth, async (req, res) => {
@@ -28,13 +35,20 @@ router.put('/:id', auth, async (req, res) => {
     description: req.body.description,
     solutions: req.body.solution
   })
-  if (!question) return question.status(404)
-    .send('Can not find the question');
+  if (!question){
+    logger.error(`Can not find the question: ${req.params.id}`); 
+    return question.status(404).send('Can not find the question');
+  }   
+  logger.verbose(`Put the question: ${question}`);
   res.status(200).send(question);
 })
 router.delete('/:id', [auth, admin], async (req, res) => {
   const question = await Question.findByIdAndDelete(req.params.id);
-  if (!question) return res.status(404).send('Can not find the question');
+  if (!question){
+    logger.error(`Can not find the question: ${req.params.id}`); 
+    return res.status(404).send('Can not find the question');
+  } 
+  logger.verbose(`Delete the question: ${question}`);
   res.status(200).send(question);
 })
 
