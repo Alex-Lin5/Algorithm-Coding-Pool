@@ -29,14 +29,11 @@ describe(root, () => {
       const questions = await Question.find().populate(['solutions', 'description']);
       const description = await Description.findOne();
       const res = await request(server).get(root);
-      console.log('questions,', questions);
-      console.log('res get all:', res.body);
-      console.log('res solutions,', res.body.solutions);
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
       expect(res.body.some(q => q.description == description._id)).toBeTruthy();
-      expect(res.body.solutions).toEqual(expect.arrayContaining([solution._id.toString()]))
+      expect(res.body[0].solutions).toEqual(expect.arrayContaining([solution._id.toString()]))
     })
   })
 
@@ -53,6 +50,9 @@ describe(root, () => {
       const revert = await Question.findOneAndDelete({
         description: descriptionID
       })
+      console.log('description,', res.body.description);
+      console.log('res get one:', res.body);
+      console.log('res solutions,', res.body.solutions);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('_id');

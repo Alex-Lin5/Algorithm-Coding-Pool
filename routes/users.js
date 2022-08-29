@@ -1,5 +1,5 @@
 const logger = require('../startup/logger');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authorization');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const User = require('../models/user');
@@ -23,10 +23,11 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
+  logger.verbose(`User saved successfully, ${user._id}`);
 
   const token = user.generateAuthToken();
   logger.verbose(`User token send: ${token}`);
-  res.header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
+  res.status(200).header('x-auth-token', token).send(_.pick(user, ['_id', 'name', 'email']));
 });
 
 module.exports = router; 

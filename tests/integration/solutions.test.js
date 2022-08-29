@@ -75,8 +75,8 @@ describe('/solutions', () => {
         answer: answer._id
       })
       const codeID = solution.code;
-      const answerUP = new mongoose.Types.ObjectId().toString();
-      const codeUP = new mongoose.Types.ObjectId().toString();
+      const answerUP = await new mongoose.Types.ObjectId().toString();
+      const codeUP = await new mongoose.Types.ObjectId().toString();
       const solutionUp = {
         answer: answerUP,
         code: codeUP
@@ -95,6 +95,7 @@ describe('/solutions', () => {
 
       console.log('Updated:', updated);
       console.log('reverted:', reverted);
+      console.log('res.body: ', res.body);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('answer', answerUP);

@@ -1,5 +1,5 @@
 const logger = require('../startup/logger');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authorization');
 const Description = require('../models/description');
 const express = require('express');
 const router = express.Router();

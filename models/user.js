@@ -6,14 +6,14 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength: 50,
+    minlength: 2,
+    maxlength: 32,
     default: 'John Doe'
   },
   email: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 6,
     maxlength: 255,
     unique: true,
     default: 'example@gmail.com'
@@ -21,9 +21,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 5,
-    maxlength: 1024,
-    default: '123456'
+    minlength: 6,
+    maxlength: 64
   },
   isAdmin: {
     type: Boolean,

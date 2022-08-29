@@ -1,5 +1,5 @@
 const logger = require('../startup/logger');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authorization');
 const admin = require('../middleware/admin');
 const Question = require('../models/question');
 // const Answer = require('../models/answer');

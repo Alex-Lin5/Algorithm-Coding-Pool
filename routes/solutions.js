@@ -1,5 +1,5 @@
 const logger = require('../startup/logger');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authorization');
 // const Answer = require('../models/answer');
 // const Code = require('../models/code');
 const Solution = require('../models/solution');

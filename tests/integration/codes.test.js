@@ -1,13 +1,10 @@
 const request = require('supertest');
 const Code = require('../../models/code');
-const config = require("config");
 
-const db = config.get('db');
 const root = '/codes';
 
 describe(root, () => {
   let server;
-  console.log('db: ', db);
   beforeEach(() => {
     server = require('../../index');
   })
