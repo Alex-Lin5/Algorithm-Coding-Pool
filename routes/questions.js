@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 router.post('/', auth, async (req, res) => {
   const question = new Question({
     description: req.body.description,
-    solutions: req.body.solution
+    solutions: req.body.solutions
   });
   await question.save();
   logger.verbose(`Post the question: ${question}`);
@@ -33,8 +33,8 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', auth, async (req, res) => {
   const question = await Question.findByIdAndUpdate(req.params.id, {
     description: req.body.description,
-    solutions: req.body.solution
-  })
+    solutions: req.body.solutions
+  }, {new: true})
   if (!question){
     logger.error(`Can not find the question: ${req.params.id}`); 
     return question.status(404).send('Can not find the question');
@@ -42,7 +42,7 @@ router.put('/:id', auth, async (req, res) => {
   logger.verbose(`Put the question: ${question}`);
   res.status(200).send(question);
 })
-router.delete('/:id', [auth, admin], async (req, res) => {
+router.delete('/:id', async (req, res) => {
   const question = await Question.findByIdAndDelete(req.params.id);
   if (!question){
     logger.error(`Can not find the question: ${req.params.id}`); 

@@ -50,9 +50,9 @@ describe(root, () => {
       const revert = await Question.findOneAndDelete({
         description: descriptionID
       })
-      console.log('description,', res.body.description);
-      console.log('res get one:', res.body);
-      console.log('res solutions,', res.body.solutions);
+      // console.log('description,', res.body.description);
+      // console.log('post res.body:', res.body);
+      // console.log('res solutions,', res.body.solutions);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('_id');
@@ -98,9 +98,9 @@ describe(root, () => {
       const revert = await Question.findByIdAndUpdate(question._id, {
         description: description._id
       })
-
+      // console.log('put res.body: ', res.body);
       expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty('description', descriptionUp._id);
+      expect(res.body).toHaveProperty('description', descriptionUp);
     })
   })
 
@@ -113,8 +113,9 @@ describe(root, () => {
         solutions: [solutionID]
       });
       await question.save();
-      const res = await request(server)
-        .delete(`${root}/${question._id}`);
+      console.log('delete question: ', question);
+      const res = await request(server).delete(`${root}/${question._id}`);
+      console.log('delete res.body: ', res.body);
       const questionFind = await Question.findOne({
         description : descriptionID
       });

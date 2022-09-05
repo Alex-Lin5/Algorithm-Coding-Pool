@@ -85,17 +85,18 @@ describe('/solutions', () => {
         .put(`${root}/${solution._id}`)
         .send(solutionUp);
 
-      // const updated = await Solution.findById(solution._id).populate(['answer', 'code']);
       const updated = await Solution.findById(solution._id);
+      // console.log('Updated:', updated);
+      // console.log('res.body: ', res.body);
+      // console.log('solutionUp: ', solutionUp);
       const revert = await Solution.findByIdAndUpdate(solution._id, {
         answer: answer._id,
         code: codeID
       })
       const reverted = await Solution.findById(solution._id).populate(['answer', 'code']);
 
-      console.log('Updated:', updated);
-      console.log('reverted:', reverted);
-      console.log('res.body: ', res.body);
+      // console.log('revert: ', revert);
+      // console.log('reverted:', reverted);
 
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('answer', answerUP);

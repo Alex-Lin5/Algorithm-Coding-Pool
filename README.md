@@ -39,6 +39,6 @@ While the BSON format itself is little-endian, the timestamp and counter values 
 
 If an integer value is used to create an ObjectId, the integer replaces the timestamp.
 
+https://www.mongodb.com/docs/manual/reference/method/ObjectId/
+
 ## Bugs
-- **PUT** operation can not get correct result from request in `solution.test.js`
-https://stackoverflow.com/questions/73381653/cannot-get-correct-result-from-put-operation-via-npm-supertest-in-jest

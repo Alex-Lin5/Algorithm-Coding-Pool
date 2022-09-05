@@ -34,7 +34,7 @@ router.put('/:id', auth, async (req, res) => {
   const solution = await Solution.findByIdAndUpdate(req.params.id, {
     answer: req.body.answer,
     code: req.body.code
-  })
+  }, {new: true})
   if (!solution) {
     logger.error(`Can not find the solution: ${req.params.id}`);
     return res.status(404).send('Can not find the solution');
