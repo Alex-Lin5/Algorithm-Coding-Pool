@@ -12,6 +12,7 @@ module.exports = function (err, req, res, next) {
   try {
     const decoded = jwt.verify(token, config.get('jwtPrivateKey'));
     req.user = decoded; 
+    logger.verbose(`Token decoded during authorization: ${decoded}`);
     next();
   }
   catch (ex) {

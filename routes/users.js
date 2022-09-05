@@ -1,13 +1,13 @@
 const logger = require('../startup/logger');
 const auth = require('../middleware/authorization');
+const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
-const User = require('../models/user');
 const express = require('express');
 const router = express.Router();
 
-router.get('/me', auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password');
+router.get('/me/:id', auth, async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password');
   logger.verbose(`Send user: ${user}`);
   res.send(user);
 });
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
-  logger.verbose(`User saved successfully, ${user._id}`);
+  logger.verbose(`User saved successfully, ${user}`);
 
   const token = user.generateAuthToken();
   logger.verbose(`User token send: ${token}`);
