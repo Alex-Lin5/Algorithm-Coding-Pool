@@ -46,6 +46,8 @@ For Windows powershell
 ### NPM package management
 - `npm outdated`, list all packages available to update
 - `npm update`, updates all packages available to update
+- `npm i -g npm-check-updates`, globally install ncu package to manege update
+  - `ncu -u`, upgrade all packages in repository to latest version
 
 ### Mongo ObjectID
 The 12-byte ObjectId consists of:
