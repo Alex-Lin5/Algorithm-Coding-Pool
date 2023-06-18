@@ -11,6 +11,14 @@ const error = require('../middleware/error');
 
 module.exports = function(app){
   app.use(express.json());
+  // CORS setting
+  app.use((req, res, next) => {
+    res.append('Access-Control-Allow-Origin', ['http://localhost:4200']);
+    res.append('Access-Control-Allow-Credentials', 'true');
+    res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.append('Access-Control-Allow-Headers', ['Content-Type', 'Authorization']);
+    next();
+  })
   app.get('/', (req, res) => {
     res.send('home');
   })

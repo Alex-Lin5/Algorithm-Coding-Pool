@@ -20,12 +20,16 @@ default object is mongoose model, `&` is reference to mongoose schema objectID, 
 |→|question|-|solutions: [& solution]|
 |||-|& description|
 
+## View
+Adopt frontend framework angular as user interface to interact with this service, https://github.com/Alex-Lin5/CodingWeb
+
 ## Environment
 
 ### Configuration
 - Docker compose file set up **NODE_ENV** variable value in containers
 - database directory is refered from `/config/*.json` file
-
+### CORS policy
+Refer to CORS document [here in Mozilla](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 ## Mongo Service
 Type `mongo` in terminal to enter mongodb shell
 - `show dbs`, list all databases in current connection
@@ -48,6 +52,7 @@ For Windows powershell
 - `npm update`, updates all packages available to update
 - `npm i -g npm-check-updates`, globally install ncu package to manege update
   - `ncu -u`, upgrade all packages in repository to latest version
+- `npm list -g --depth=0`, list all globally installed packages without its dependencies
 
 ### Mongo ObjectID
 The 12-byte ObjectId consists of:

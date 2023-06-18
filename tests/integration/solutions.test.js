@@ -87,8 +87,6 @@ describe('/solutions', () => {
 
       const updated = await Solution.findById(solution._id);
       // console.log('Updated:', updated);
-      // console.log('res.body: ', res.body);
-      // console.log('solutionUp: ', solutionUp);
       const revert = await Solution.findByIdAndUpdate(solution._id, {
         answer: answer._id,
         code: codeID
@@ -101,8 +99,6 @@ describe('/solutions', () => {
       expect(res.status).toBe(200);
       expect(res.body).toHaveProperty('answer', answerUP);
       expect(res.body).toHaveProperty('code', codeUP);
-      // expect(res.body.answer).toEqual(answerUP);
-      // expect(res.body).toHaveProperty('code', codeUP);
     })
   })
 
