@@ -20,7 +20,8 @@ module.exports = function(app){
     next();
   })
   app.get('/', (req, res) => {
-    res.send('home');
+    res.send('home. This is http://localhost:3000.' + `<br><br>` +
+     'Source code at https://github.com/Alex-Lin5/Algorithm-Coding-Pool');
   })
   app.use('/descriptions', descriptions);
   app.use('/codes', codes);

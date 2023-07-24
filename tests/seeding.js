@@ -51,7 +51,10 @@ async function seeding(){
   ];
   const codes = [
     { content: 'good code here'},
-    { content: 'Java here', language: 'Java'}
+    { content: 'Java here', language: 'Java'},
+    { content: 'Javascript code here', language: 'Javascript'},
+    { content: 'New C++ code', language: 'C++'},
+    { content: 'Different Python code', language: 'Python'}
   ];
   await Answer.insertMany(answers);
   await Code.insertMany(codes);

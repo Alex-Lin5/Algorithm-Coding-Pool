@@ -4,10 +4,28 @@ const Code = require('../models/code');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-  const codes = await Code.find();
-  logger.verbose(`Get all codes: ${codes}`);
-  res.status(200).send(codes);
+router.get('/', (req, res) => {
+  // console.log("Get req query is ", req.query);
+  const pageSize = req.query.pageSize;
+  const currentPage = req.query.page;
+  const codesQuery = Code.find();
+  if(req.query.count == 'true'){
+    logger.verbose("Counting codes number, do not return codes list.");
+    Code.find().countDocuments().then(cap => {
+      logger.verbose("Get codes capacity is", cap.toString());
+      res.status(200).send(cap.toString());  
+    })
+    return;
+  }
+  
+  if (pageSize && currentPage) {
+    codesQuery.skip(pageSize * currentPage).limit(pageSize);
+    logger.verbose(`current page of page size is (${currentPage}, ${pageSize}).`);
+  } 
+  codesQuery.then(codesList => {
+    logger.verbose(`Get Codes list: ${codesList}.`);
+    res.status(200).send(codesList);
+  })
 });
 router.post('/', auth, async (req, res) => {
   const code = new Code({

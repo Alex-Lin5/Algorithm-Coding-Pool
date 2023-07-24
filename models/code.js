@@ -22,7 +22,8 @@ const codeSchema = new mongoose.Schema({
   performance: {
     type: String,
     minlength: 5,
-    maxlength: 50
+    maxlength: 50,
+    default: 'Not avaiable.'
   }
 });
 const Code = mongoose.model('Code', codeSchema);

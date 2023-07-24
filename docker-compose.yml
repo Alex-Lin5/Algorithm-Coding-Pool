@@ -1,7 +1,7 @@
 version: '3'
 services:
   mongo:
-    image: mongo:6
+    image: mongo:7.0-rc
     restart: on-failure
     logging:
       driver: none
@@ -21,6 +21,8 @@ services:
   #     ME_CONFIG_MONGODB_ADMINPASSWORD: example
   #     ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
+
+# NODE_ENV has to be container, otherwise it will throw out error
   dev:
     depends_on:
       - mongo
@@ -29,9 +31,9 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '7070:7070'
+      - 7070:7070
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=container
       - PORT=7070
     volumes:
       - /app/node_modules
@@ -45,8 +47,8 @@ services:
     build:  
       context: .
       dockerfile: Dockerfile
-    ports:
-      - '9000:3000'
+    # ports:
+    #   - '9000:3000'
     environment:
       - NODE_ENV=container
       - PORT=3000
